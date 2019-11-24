@@ -21,7 +21,7 @@ class Minitel extends EventEmitter {
 					Selon:
 					http://minitel.cquest.org/musee/minitel/documentation-utilisateurs/Mode%20d%27emploi%20Minitel%202%20philips.pdf
 					*/
-					baudRate: isHighSpeed ? 9600 : 1200;
+					baudRate: (isHighSpeed ? 9600 : 1200),
 				});
 				serialConnection.on("open", () => { 
 					this.hasOpened = true;
@@ -42,9 +42,18 @@ class Minitel extends EventEmitter {
 			_rawSend(String.fromCharCode(asciiChr));
 		}
 		
+		_format(texte) {
+			// TODO: faire un truc
+			return texte;
+		}
+	
+		_print(text) {
+			_rawSend(_format(text));
+		}
+	
 		sendEsc(text) {
-        		_sendASCII(27)
-        		_rawSend(text)
+        		_sendASCII(27);
+        		_rawSend(text);
 		}
 
 		beep() { // BEEP
