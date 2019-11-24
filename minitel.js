@@ -16,6 +16,17 @@ class Minitel extends EventEmitter {
 				this.path = path; // du type "/dev/ttyUSB0"
 				this.isHighSpeed = isHighSpeed; // Minitel 2+ seulement !
 				this.hasOpened = false;
+				this.colors = {
+					black: 0,
+					red: 1,
+					green: 2,
+					yellow: 3,
+					blue: 4,
+					magenta: 5,
+					cyan: 6,
+					white: 7
+				};
+
 				serialConnection = new serial(path, {
 					/*
 					Selon:
@@ -29,7 +40,7 @@ class Minitel extends EventEmitter {
 					this.emit("ready", true);
 				});
 		}
-    
+    		
 		_rawSend(data) {
 			// Envoi de données vers le minitel
 			if (this.hasOpened) {
@@ -95,7 +106,7 @@ class Minitel extends EventEmitter {
 			_tempTexte = ""; // Good Practice :)
 		}
 	
-		_print(text) {
+		print(text) {
 			_rawSend(_format(text));
 		}
 	
