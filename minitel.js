@@ -3,7 +3,7 @@ Minitel.js
 par jiktim
 */
 
-const EventEmitter = require('events');
+const EventEmitter = require("events");
 const serial = require("serialport"); 
 const noEventHandler = { on: ()=>{},
                        emit: ()=>{} 
@@ -27,5 +27,9 @@ class Minitel extends EventEmitter {
           this.hasOpened = true;
           this.emit("ready", true);
         });
+    }
+    
+    _rawSend(data) {
+      // Envoi de données vers le minitel
     }
 }
