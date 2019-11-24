@@ -5,9 +5,11 @@ par jiktim
 
 const EventEmitter = require("events");
 const serial = require("serialport"); 
+const readLine = require('@serialport/parser-readline')
 const defaultFunction = (a, b) => {};
 const noEventHandler =  { on: defaultFunction, emit: defaultFunction };
 
+let parser = noEventHandler;
 let serialConnection = noEventHandler;
 
 class Minitel extends EventEmitter {
@@ -15,6 +17,8 @@ class Minitel extends EventEmitter {
 				this.path = path; // du type "/dev/ttyUSB0"
 				this.isHighSpeed = isHighSpeed; // Minitel 2+ seulement !
 				this.hasOpened = false;
+				this.lastInput = "";
+				this._handleInput = defaultFunction;
 				this.colors = {
 					black: 0,
 					red: 1,
@@ -38,8 +42,16 @@ class Minitel extends EventEmitter {
 					this.hasOpened = true;
 					this.emit("ready", true);
 				});
+			
+				parser = port.pipe(new readLine({ delimiter: "\n" }));
+				parser.on("data", this._handleInput)
 		}
     		
+		_handleInput(data) {
+			this.lastInput = data;
+			this.emit("lineInput", this.lastInput); 
+		}
+
 		_rawSend(data) {
 			// Envoi de données vers le minitel
 			if (this.hasOpened) {
