@@ -8,6 +8,7 @@ const serial = require("serialport");
 const { Transform } = require("stream")
 const defaultFunction = (a, b) => {};
 const noEventHandler =  { on: defaultFunction, emit: defaultFunction };
+let isCursorEnabled = false;
 
 let parser = noEventHandler;
 let serialConnection = noEventHandler;
@@ -17,18 +18,23 @@ class MinitelInputParser extends Transform {
 	constructor(options = {}) {
     		super(options);
 		this.buffer = Buffer.alloc(0);
+		this.i = 0;
 	}
 	
 	_transform(chunk, encoding, cb) {
 		// TODO: faire le handler pour le transform
-		this.buffer.push(chunk);
+		if (isCursorEnabled) {
+			// TODO: ajouter les caveats du
+			// https://github.com/cquest/pynitel/blob/master/pynitel.py#L196
+			this.buffer.push(chunk);
+			this.i++;
+		}
 		cb();
 	}
 }
 
 class Minitel extends EventEmitter {
 		constructor(path="/dev/ttyUSB0", isHighSpeed=false) {
-				this.isCursorEnabled = false;
 				this.path = path; // du type "/dev/ttyUSB0"
 				this.isHighSpeed = isHighSpeed; // Minitel 2+ seulement !
 				this.hasOpened = false;
@@ -141,7 +147,25 @@ class Minitel extends EventEmitter {
         		_sendASCII(27);
         		_rawSend(text);
 		}
-	
+		
+		setCursorPosition(rows = 1, columns = 1) {
+			if (rows < 1 || columns < 1) {
+				throw new Error("Rows/Columns can't go under 1!");
+			} else {
+				if (rows == 0 && columns = 0) {
+					_sendASCII(30);
+				} else {
+					_sendASCII(31);	// Cursor changing mode :D
+					_sendASCII(rows + 64); // Set position
+					_sendASCII(columns + 64);
+					/*
+					// Beep for happiness :)
+					_sendASCII(7);
+					*/
+				}
+			}
+		}
+
 		setBGColor(color) {
         		sendEsc(String.fromCharCode(color + 80))
 		}
