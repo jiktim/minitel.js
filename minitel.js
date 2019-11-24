@@ -4,7 +4,10 @@ par jiktim
 */
 
 let serial = require("serialport"); 
-let serialConnection = null;
+let noEventHandler = { on: ()=>{},
+                       emit: ()=>{} 
+                     }
+let serialConnection = noEventHandler;
 
 class Minitel {
     constructor(path="/dev/ttyUSB0", isHighSpeed=false) {
@@ -18,7 +21,6 @@ class Minitel {
             */
             baudRate: isHighSpeed ? 9600 : 1200;
         });
+        serialConnection.on("open", () => { this.hasOpened = true; });
     }
-    
-    serialConnection.on("open", () => { this.hasOpened = true; });
 }
