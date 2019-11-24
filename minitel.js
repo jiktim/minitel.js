@@ -14,13 +14,15 @@ let serialConnection = noEventHandler;
 
 class MinitelInputParser extends Transform {
 	// TODO: le faire marcher
-	constructor (options = {}) {
-    		super(options)
-		this.buffer = Buffer.alloc(0)
+	constructor(options = {}) {
+    		super(options);
+		this.buffer = Buffer.alloc(0);
 	}
 	
 	_transform(chunk, encoding, cb) {
 		// TODO: faire le handler pour le transform
+		this.buffer.push(chunk);
+		cb();
 	}
 }
 
