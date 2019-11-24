@@ -3,13 +3,15 @@ Minitel.js
 par jiktim
 */
 
-let serial = require("serialport"); 
-let noEventHandler = { on: ()=>{},
+const EventEmitter = require('events');
+const serial = require("serialport"); 
+const noEventHandler = { on: ()=>{},
                        emit: ()=>{} 
-                     }
+                     };
+
 let serialConnection = noEventHandler;
 
-class Minitel {
+class Minitel extends EventEmitter {
     constructor(path="/dev/ttyUSB0", isHighSpeed=false) {
         this.path = path; // du type "/dev/ttyUSB0"
         this.isHighSpeed = isHighSpeed; // Minitel 2+ seulement !
@@ -21,6 +23,9 @@ class Minitel {
             */
             baudRate: isHighSpeed ? 9600 : 1200;
         });
-        serialConnection.on("open", () => { this.hasOpened = true; });
+        serialConnection.on("open", () => { 
+          this.hasOpened = true;
+          this.emit("ready", true);
+        });
     }
 }
