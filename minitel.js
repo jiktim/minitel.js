@@ -31,5 +31,10 @@ class Minitel extends EventEmitter {
     
     _rawSend(data) {
       // Envoi de données vers le minitel
+      if (this.hasOpened) {
+         serialConnection.write(data);
+      } else {
+        throw new Error("Tried to send data while connection hasn't opened yet!");
+      }
     }
 }
