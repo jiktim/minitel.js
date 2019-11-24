@@ -114,7 +114,7 @@ class Minitel extends EventEmitter {
 			_tempTexte = _tempTexte.replace("Ç", "C")
 			
 			return _tempTexte;
-			_tempTexte = ""; // Good Practice :)
+			delete _tempTexte; // hence calls the GC
 		}
 	
 		print(text) {
