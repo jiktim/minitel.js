@@ -4,13 +4,17 @@ par jiktim
 */
 
 const EventEmitter = require("events");
-const serial = require("serialport"); 
-const readLine = require('@serialport/parser-readline')
+const serial = require("serialport");
+const { Transform } = require('stream')
 const defaultFunction = (a, b) => {};
 const noEventHandler =  { on: defaultFunction, emit: defaultFunction };
 
 let parser = noEventHandler;
 let serialConnection = noEventHandler;
+
+class MinitelInputParser extends Transform {
+	// TODO: le faire marcher
+}
 
 class Minitel extends EventEmitter {
 		constructor(path="/dev/ttyUSB0", isHighSpeed=false) {
@@ -44,15 +48,15 @@ class Minitel extends EventEmitter {
 					this.emit("ready", true);
 				});
 			
-				parser = port.pipe(new readLine({ delimiter: "\n" }));
-				parser.on("data", this._handleInput)
+				/* parser = port.pipe(new readLine({ delimiter: "\n" }));
+				parser.on("data", this._handleInput) */
 		}
     		
 		_handleInput(data) {
-			if (isCursorEnabled) {
+			/* if (isCursorEnabled) {
 				this.lastInput = data;
 				this.emit("lineInput", this.lastInput); 
-			}
+			} */
 		}
 
 		_rawSend(data) {
