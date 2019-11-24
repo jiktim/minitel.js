@@ -37,4 +37,17 @@ class Minitel extends EventEmitter {
 				throw new Error("Tried to send data while connection hasn't opened yet!");
 			}
 		}
+		
+		_sendASCII(asciiChr) {
+			_rawSend(String.fromCharCode(asciiChr));
+		}
+		
+		sendEsc(text) {
+        		_sendASCII(27)
+        		_rawSend(text)
+		}
+
+		beep() { // BEEP
+			_sendASCII(7);
+		}
 }
