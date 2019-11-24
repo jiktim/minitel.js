@@ -6,7 +6,7 @@ par jiktim
 const EventEmitter = require("events");
 const serial = require("serialport"); 
 const noEventHandler =  { 	on: ()=>{},
-							emit: ()=>{} 
+						    emit: ()=>{} 
 						};
 
 let serialConnection = noEventHandler;
