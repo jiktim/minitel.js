@@ -10,6 +10,7 @@ class Minitel {
     constructor(path="/dev/ttyUSB0", isHighSpeed=false) {
         this.path = path; // du type "/dev/ttyUSB0"
         this.isHighSpeed = isHighSpeed; // Minitel 2+ seulement !
+        this.hasOpened = false;
         serialConnection = new serial(path, {
             /*
             Selon:
@@ -18,4 +19,6 @@ class Minitel {
             baudRate: isHighSpeed ? 9600 : 1200;
         });
     }
+    
+    serialConnection.on("open", () => { this.hasOpened = true; });
 }
