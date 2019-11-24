@@ -14,6 +14,7 @@ let serialConnection = noEventHandler;
 
 class Minitel extends EventEmitter {
 		constructor(path="/dev/ttyUSB0", isHighSpeed=false) {
+				this.isCursorEnabled = false;
 				this.path = path; // du type "/dev/ttyUSB0"
 				this.isHighSpeed = isHighSpeed; // Minitel 2+ seulement !
 				this.hasOpened = false;
@@ -48,8 +49,10 @@ class Minitel extends EventEmitter {
 		}
     		
 		_handleInput(data) {
-			this.lastInput = data;
-			this.emit("lineInput", this.lastInput); 
+			if (isCursorEnabled) {
+				this.lastInput = data;
+				this.emit("lineInput", this.lastInput); 
+			}
 		}
 
 		_rawSend(data) {
