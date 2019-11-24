@@ -115,6 +115,10 @@ class Minitel extends EventEmitter {
         		_rawSend(text);
 		}
 	
+		setBGColor(color) {
+        		sendEsc(String.fromCharCode(color + 80))
+		}
+	
 		setColor(color) {
         		sendEsc(String.fromCharCode(color + 64))
 		}
