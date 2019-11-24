@@ -109,12 +109,16 @@ class Minitel extends EventEmitter {
 		print(text) {
 			_rawSend(_format(text));
 		}
-	
+		
 		sendEsc(text) {
         		_sendASCII(27);
         		_rawSend(text);
 		}
-
+	
+		setColor(color) {
+        		sendEsc(String.fromCharCode(64+couleur))
+		}
+		
 		beep() { // BEEP
 			_sendASCII(7);
 		}
