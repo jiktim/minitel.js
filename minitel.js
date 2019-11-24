@@ -116,7 +116,7 @@ class Minitel extends EventEmitter {
 		}
 	
 		setColor(color) {
-        		sendEsc(String.fromCharCode(64+couleur))
+        		sendEsc(String.fromCharCode(color + 64))
 		}
 		
 		beep() { // BEEP
