@@ -79,7 +79,7 @@ class Minitel extends EventEmitter {
 			_tempTexte = _tempTexte.replace("↑", "\x19\x2D")
 			_tempTexte = _tempTexte.replace("→", "\x19\x2E")
 			_tempTexte = _tempTexte.replace("↓", "\x19\x2F")
-			_tempTexte = _tempTexte.replace('̶", "\x60")
+			_tempTexte = _tempTexte.replace('̶"', "\x60")
 			_tempTexte = _tempTexte.replace("|", "\x7C")
 			
 			// Caractères accentués inexistants sur Minitel
