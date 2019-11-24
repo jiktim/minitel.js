@@ -5,7 +5,7 @@ par jiktim
 
 const EventEmitter = require("events");
 const serial = require("serialport");
-const { Transform } = require('stream')
+const { Transform } = require("stream")
 const defaultFunction = (a, b) => {};
 const noEventHandler =  { on: defaultFunction, emit: defaultFunction };
 
@@ -14,6 +14,14 @@ let serialConnection = noEventHandler;
 
 class MinitelInputParser extends Transform {
 	// TODO: le faire marcher
+	constructor (options = {}) {
+    		super(options)
+		this.buffer = Buffer.alloc(0)
+	}
+	
+	_transform(chunk, encoding, cb) {
+		// TODO: faire le handler pour le transform
+	}
 }
 
 class Minitel extends EventEmitter {
@@ -48,7 +56,7 @@ class Minitel extends EventEmitter {
 					this.emit("ready", true);
 				});
 			
-				/* parser = port.pipe(new readLine({ delimiter: "\n" }));
+				/* parser = port.pipe(new MinitelInputParser({ delimiter: "\n" }));
 				parser.on("data", this._handleInput) */
 		}
     		
