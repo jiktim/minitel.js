@@ -209,3 +209,5 @@ class Minitel extends EventEmitter {
     _sendASCII(7);
   }
 }
+
+module.exports = Minitel;
