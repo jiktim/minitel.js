@@ -3,11 +3,12 @@ minitel.js
 example hello world!
 */
 
-const minitel = require("minitel");
-// Initialize the server on the USB device
-let server = new minitel("/dev/ttyUSB0", false);
+const minitel = require("./minitel.js");
+// Initialize the server
+let server = new minitel();
 
-// This is usually not needed.
-server.on("ready", () => {
-  server.print("Hello, world!\nHello, Minitel!\n\nFrom: jiktim's minitel.js");
+console.log("open");
+server.on("connection", (client) => {
+  client.print("Hello, world!");
+  client.beep();
 });
