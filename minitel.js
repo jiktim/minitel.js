@@ -115,7 +115,7 @@ class Minitel extends EventEmitter {
   }
 
   _sendASCII(asciiChr) {
-    _rawSend(String.fromCharCode(asciiChr));
+    this._rawSend(String.fromCharCode(asciiChr));
   }
 
   _format(texte) {
@@ -171,25 +171,25 @@ class Minitel extends EventEmitter {
   }
 
   print(text) {
-    _rawSend(_format(text));
+    this._rawSend(this._format(text));
   }
 
   sendEsc(text) {
-    _sendASCII(27);
-    _rawSend(text);
+    this._sendASCII(27);
+    this._rawSend(text);
   }
 
   setCursorPosition(rows = 1, columns = 1) {
     if (rows < 1 || columns < 1) {
       throw new Error("Rows/Columns can't go under 1!");
     } else if (rows == 0 && columns === 0) {
-      _sendASCII(30);
+      this._sendASCII(30);
     } else {
       // Cursor changing mode :D
-      _sendASCII(31);
+      this._sendASCII(31);
       // Set position
-      _sendASCII(rows + 64);
-      _sendASCII(columns + 64);
+      this._sendASCII(rows + 64);
+      this._sendASCII(columns + 64);
 
       /* Beep for happiness :)
       _sendASCII(7); */
@@ -198,16 +198,16 @@ class Minitel extends EventEmitter {
   }
 
   setBGColor(color) {
-    sendEsc(String.fromCharCode(color + 80));
+    this.sendEsc(String.fromCharCode(color + 80));
   }
 
   setColor(color) {
-    sendEsc(String.fromCharCode(color + 64));
+    this.sendEsc(String.fromCharCode(color + 64));
   }
 
   // BEEP
   beep() {
-    _sendASCII(7);
+    this._sendASCII(7);
   }
 }
 
