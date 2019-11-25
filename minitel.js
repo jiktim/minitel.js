@@ -68,16 +68,13 @@ class Minitel extends EventEmitter {
       this.emit("ready", true);
     });
 
-    /* parser = port.pipe(new MinitelInputParser({ delimiter: "\n" }));
-    parser.on("data", this._handleInput) */
+    parser = port.pipe(new MinitelInputParser());
+    parser.on("data", this._handleInput)
   }
 
   _handleInput(_data) {
-
-    /* if (isCursorEnabled) {
-    	this.lastInput = data;
-    	this.emit("lineInput", this.lastInput);
-    } */
+    this.lastInput = data;
+    this.emit("lineInput", this.lastInput);
   }
 
   _rawSend(data) {
