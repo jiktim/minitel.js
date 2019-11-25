@@ -1,6 +1,10 @@
-class MinitelClient {
+const EventEmitter = require("events");
+
+class MinitelClient extends EventEmitter {
 	
-   constructor(path) {};
+    constructor(path) {
+	    super();
+    };
   /* _handleInput(_data) {
     this.lastInput = data;
     this.emit("lineInput", this.lastInput);

@@ -1,6 +1,6 @@
 /*
 minitel.js
-example hello world!
+example echo!
 */
 
 const minitel = require("../minitel.js");
@@ -9,8 +9,7 @@ let server = new minitel();
 
 // console.log("open");
 server.on("connection", (client) => {
-  console.log("connection");
-  console.log(client);
-  client.print("azerty\nqsdfgh\nwxcvbn");
-  client.beep();
+  client.on("keyPress", (key) => {
+	client.print(key);
+  });
 });

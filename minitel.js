@@ -13,6 +13,10 @@ class MinitelWSClient extends MinitelClient {
 		this.connection = connection;
 	}
 	
+	_handleKeyPress(keyPress) {
+		this.emit("keyPress", keyPress);
+	}
+	
 	_rawSend(data) {
 		// Envoi de données vers le minitel
 		// if (this.hasOpened) {
@@ -29,8 +33,12 @@ class Minitel extends EventEmitter {
     this.wsPort = wsPort;
     // websocket
     this.wsServer = new websocket.Server({ port: this.wsPort });
-    this.wsServer.on("connection", (epic) => {
-        this.emit("connection", new MinitelWSClient(epic));
+    this.wsServer.on("connection", (connection) => {
+		let currentConnection = new MinitelWSClient(connection);
+        this.emit("connection", currentConnection);
+		connection.on("message", (keyPress) => {
+			currentConnection._handleKeyPress(keyPress);
+		});
     });
   }
 }
