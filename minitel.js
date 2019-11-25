@@ -24,6 +24,10 @@ class MinitelInputParser extends Transform {
       // https://github.com/cquest/pynitel/blob/master/pynitel.py#L196
       if (chunk.toString() >= " ") { // si c'est une lettre
         this.buffer.push(chunk);
+      } else if (chunk.toString() >= "\n") {
+        this.push(this.buffer);
+        this.buffer = Buffer.alloc(0);
+        this.i = 0;
       }
       this.i++;
     }
