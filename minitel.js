@@ -4,8 +4,8 @@ const EventEmitter = require("events");
 const websocket = require("ws");
 const defaultFunction = (_a, _b) => {};
 const noEventHandler = { on: defaultFunction, emit: defaultFunction };
-let parser = noEventHandler;
-let serialConnection = noEventHandler;
+const MinitelClient = require("./client");
+const MinitelInputParser = require("./inputParser");
 
 class MinitelWSClient extends MinitelClient {
 	constructor(connection) {
