@@ -5,7 +5,7 @@
   "main": "minitel.js",
   "dependencies": {
     "serialport": "^8.0.5",
-    "websocket": "^1.0.30"
+    "ws": "^7.2.0"
   },
   "devDependencies": {},
   "scripts": {
