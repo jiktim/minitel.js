@@ -2,6 +2,8 @@
 
 const EventEmitter = require("events");
 const serial = require("serialport");
+const websocketServer = require("websocket").server;
+const http = require("http");
 const { Transform } = require("stream");
 const defaultFunction = (_a, _b) => {};
 const noEventHandler = { on: defaultFunction, emit: defaultFunction };
@@ -50,6 +52,7 @@ class Minitel extends EventEmitter {
     this.isHighSpeed = isHighSpeed;
     this.hasOpened = false;
     this.lastInput = "";
+    this.connection = null;
     this._handleInput = defaultFunction;
     this.colors = {
       black: 0,
@@ -66,18 +69,30 @@ class Minitel extends EventEmitter {
     Selon:
     http://minitel.cquest.org/musee/minitel/documentation-utilisateurs/Mode%20d%27emploi%20Minitel%202%20philips.pdf
     */
+    if (this.path != "ws") {
+        serialConnection = new serial(path, {
+           baudRate: isHighSpeed ? 9600 : 1200,
+        });
 
-    serialConnection = new serial(path, {
-      baudRate: isHighSpeed ? 9600 : 1200,
-    });
+        serialConnection.on("open", () => {
+           this.hasOpened = true;
+           this.emit("ready", true);
+        });
 
-    serialConnection.on("open", () => {
-      this.hasOpened = true;
-      this.emit("ready", true);
-    });
-
-    parser = port.pipe(new MinitelInputParser());
-    parser.on("data", this._handleInput)
+        parser = port.pipe(new MinitelInputParser());
+        parser.on("data", this._handleInput);
+    } else {
+        // websocket
+        this.httpServer = http.createServer((rq, rs) => {}); // serveur http vide
+        this.httpServer.listen(43, () => {});
+        this.wsServer = new WebSocketServer({ httpServer: this.httpServer });
+        this.wsServer.on("request", (req) => { 
+                                           this.hasOpened = true; 
+                                           this.emit("connection", true);
+                                           this.connection = req.accept(null, req.origin);
+                                           this.connection.on("close", () => { this.hasOpened = false; });
+                                          });
+    }
   }
 
   _handleInput(_data) {
@@ -88,7 +103,11 @@ class Minitel extends EventEmitter {
   _rawSend(data) {
     // Envoi de données vers le minitel
     if (this.hasOpened) {
-      serialConnection.write(data);
+      if (this.wsServer) {
+              this.connection.sendUTF(data)
+      } else {
+              serialConnection.write(data);
+      }
     } else {
       throw new Error("Tried to send data while the connection isn't open!");
     }
