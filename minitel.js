@@ -18,13 +18,12 @@ class MinitelInputParser extends Transform {
   }
 
   _transform(chunk, _encoding, cb) {
-    // TODO: faire le handler pour le transform
     if (isCursorEnabled) {
       // TODO: ajouter les caveats du
       // https://github.com/cquest/pynitel/blob/master/pynitel.py#L196
       if (chunk.toString() >= " ") { // si c'est une lettre
         this.buffer.push(chunk);
-      } else if (chunk.toString() >= "\n") {
+      } else if (chunk.toString() = "\n") {
         this.push(this.buffer);
         this.buffer = Buffer.alloc(0);
         this.i = 0;
