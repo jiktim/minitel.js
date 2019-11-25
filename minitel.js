@@ -2,7 +2,7 @@
 
 const EventEmitter = require("events");
 const serial = require("serialport");
-const websocketServer = require("websocket").server;
+const websocket = require('ws');
 const http = require("http");
 const { Transform } = require("stream");
 const defaultFunction = (_a, _b) => {};
@@ -84,14 +84,11 @@ class Minitel extends EventEmitter {
         parser.on("data", this._handleInput);
     } else {
         // websocket
-        this.httpServer = http.createServer((rq, rs) => {}); // serveur http vide
-        this.httpServer.listen(43, () => {});
-        this.wsServer = new websocketServer({ httpServer: this.httpServer });
-        this.wsServer.on("request", (req) => { 
+        this.wsServer = new websocket.Server({ port: 8080 });
+        this.wsServer.on("connection", (req) => { 
                                            this.hasOpened = true; 
                                            this.emit("connection", true);
-                                           this.connection = req.accept(null, req.origin);
-                                           this.connection.on("close", () => { this.hasOpened = false; });
+                                           this.connection = req;
                                           });
     }
   }
@@ -105,7 +102,7 @@ class Minitel extends EventEmitter {
     // Envoi de données vers le minitel
     if (this.hasOpened) {
       if (this.wsServer) {
-              this.connection.sendUTF(data)
+              this.connection.send(data);
       } else {
               serialConnection.write(data);
       }
