@@ -22,7 +22,9 @@ class MinitelInputParser extends Transform {
     if (isCursorEnabled) {
       // TODO: ajouter les caveats du
       // https://github.com/cquest/pynitel/blob/master/pynitel.py#L196
-      this.buffer.push(chunk);
+      if (chunk.toString() >= " ") { // si c'est une lettre
+        this.buffer.push(chunk);
+      }
       this.i++;
     }
     cb();
