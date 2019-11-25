@@ -86,7 +86,7 @@ class Minitel extends EventEmitter {
         // websocket
         this.httpServer = http.createServer((rq, rs) => {}); // serveur http vide
         this.httpServer.listen(43, () => {});
-        this.wsServer = new WebSocketServer({ httpServer: this.httpServer });
+        this.wsServer = new websocketServer({ httpServer: this.httpServer });
         this.wsServer.on("request", (req) => { 
                                            this.hasOpened = true; 
                                            this.emit("connection", true);
