@@ -1,9 +1,7 @@
 /* Minitel.js par jiktim */
 
 const EventEmitter = require("events");
-const serial = require("serialport");
 const websocket = require("ws");
-const http = require("http");
 const defaultFunction = (_a, _b) => {};
 const noEventHandler = { on: defaultFunction, emit: defaultFunction };
 let parser = noEventHandler;
