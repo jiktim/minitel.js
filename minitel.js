@@ -46,6 +46,7 @@ class MinitelInputParser extends Transform {
 
 class Minitel extends EventEmitter {
   constructor(path = "/dev/ttyUSB0", isHighSpeed = false) {
+    super();
     // du type "/dev/ttyUSB0"
     this.path = path;
     // Minitel 2+ seulement !
