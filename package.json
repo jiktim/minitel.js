@@ -4,6 +4,7 @@
   "description": "Une librairie pour faire un serveur/programme Minitel en Node.JS",
   "main": "minitel.js",
   "dependencies": {
+    "node-fetch": "^2.6.0",
     "ws": "^7.2.0"
   },
   "devDependencies": {},

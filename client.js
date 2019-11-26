@@ -4,6 +4,7 @@ class MinitelClient extends EventEmitter {
 	
     constructor(path) {
 	    super();
+		this.minitelInputBuffer = [];
     };
   /* _handleInput(_data) {
     this.lastInput = data;
@@ -15,6 +16,12 @@ class MinitelClient extends EventEmitter {
     // Placeholder..
   }
 
+  _handleLineStop() {
+	this.emit("newLine", this.minitelInputBuffer.join(""));
+	// flush
+	this.minitelInputBuffer = [];
+	// woaw
+  }
   _sendASCII(asciiChr) {
     this._rawSend(String.fromCharCode(asciiChr));
   }
@@ -79,11 +86,11 @@ class MinitelClient extends EventEmitter {
     this._sendASCII(27);
     this._rawSend(text);
   }
-
+  
   setCursorPosition(rows = 1, columns = 1) {
-    if (rows < 1 || columns < 1) {
+    /* if (rows < 1 || columns < 1) {
       throw new Error("Rows/Columns can't go under 1!");
-    } else if (rows == 0 && columns === 0) {
+    } else */ if (rows == 0 && columns === 0) {
       this._sendASCII(30);
     } else {
       // Cursor changing mode :D
@@ -98,6 +105,11 @@ class MinitelClient extends EventEmitter {
     }
   }
 
+  cls() {
+    this.setCursorPosition(0, 1);
+	this._sendASCII(24)
+	this._sendASCII(12)
+  }
   setBGColor(color) {
     this.sendEsc(String.fromCharCode(color + 80));
   }

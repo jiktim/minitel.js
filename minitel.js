@@ -34,11 +34,17 @@ class Minitel extends EventEmitter {
     // websocket
     this.wsServer = new websocket.Server({ port: this.wsPort });
     this.wsServer.on("connection", (connection) => {
-		let currentConnection = new MinitelWSClient(connection);
+        let currentConnection = new MinitelWSClient(connection);
         this.emit("connection", currentConnection);
-		connection.on("message", (keyPress) => {
-			currentConnection._handleKeyPress(keyPress);
-		});
+		if (!currentConnection.minitelInputBuffer) currentConnection.minitelInputBuffer = [];
+        connection.on("message", (keyPress) => {
+			if (!keyPress.startsWith("\u0013")) {
+				currentConnection.minitelInputBuffer.push(keyPress);
+			} else {
+				currentConnection._handleLineStop();
+			}
+            currentConnection._handleKeyPress(keyPress);
+        });
     });
   }
 }
