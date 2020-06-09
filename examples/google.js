@@ -54,7 +54,7 @@ server.on("connection", (client) => {
 	  client.setColor(6);
 	  client.print("e");
 	  client.setCursorPosition(2, 1);
-	  client.print("vos resultats pour ");
+	  client.print("Vos resultats pour ");
 	  client.setCursorPosition(3, 1);
 	  client.print("\""+input+"\"");
 	  client.setCursorPosition(1, 1);
@@ -64,7 +64,7 @@ server.on("connection", (client) => {
   client.on("keyPress", async (key) => {
 	if(searchingMode) {
 		client.print(key);
-		let autoreq = await fetch("http://suggestqueries.google.com/complete/search?client=firefox&q=" + encodeURIComponent(client.minitelInputBuffer.join("")));
+		let autoreq = await fetch(`http://suggestqueries.google.com/complete/search?client=firefox&q=${encodeURIComponent(client.minitelInputBuffer.join(""))}`);
 		let reqauto = await autoreq.json();
 		client.setCursorPosition(14, 2);
 		client._sendASCII(24); // clear line
