@@ -28,25 +28,25 @@ class MinitelWSClient extends MinitelClient {
 }
 
 class Minitel extends EventEmitter {
-  constructor(wsPort=80) {
-    super();
-    this.wsPort = wsPort;
-    // websocket
-    this.wsServer = new websocket.Server({ port: this.wsPort });
-    this.wsServer.on("connection", (connection) => {
-        let currentConnection = new MinitelWSClient(connection);
-        this.emit("connection", currentConnection);
-		if (!currentConnection.minitelInputBuffer) currentConnection.minitelInputBuffer = [];
-        connection.on("message", (keyPress) => {
-			if (!keyPress.startsWith("\u0013")) {
-				currentConnection.minitelInputBuffer.push(keyPress);
-			} else {
-				currentConnection._handleLineStop();
-			}
-            currentConnection._handleKeyPress(keyPress);
-        });
-    });
-  }
+	constructor(wsPort=80) {
+		super();
+		this.wsPort = wsPort;
+		// websocket
+		this.wsServer = new websocket.Server({ port: this.wsPort });
+		this.wsServer.on("connection", (connection) => {
+			let currentConnection = new MinitelWSClient(connection);
+			this.emit("connection", currentConnection);
+			if (!currentConnection.minitelInputBuffer) currentConnection.minitelInputBuffer = [];
+			connection.on("message", (keyPress) => {
+				if (!keyPress.startsWith("\u0013")) {
+					currentConnection.minitelInputBuffer.push(keyPress);
+				} else {
+					currentConnection._handleLineStop();
+				}
+				currentConnection._handleKeyPress(keyPress);
+			});
+		});
+	}
 }
 
 module.exports = Minitel;
