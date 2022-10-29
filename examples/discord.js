@@ -13,7 +13,7 @@ server.on("connection", (client) => {
   client.setColor(2);
   client.setCursorPosition(9, 9);
   client.setColor(2);
-  client.print(" s a m ' s   l o u n g e ");
+  //client.print(" s a m ' s   l o u n g e ");
   client.print("\r\n");
   client.setCursorPosition(11, 10)
   client.print("tu veux envoyer quoi ?");
@@ -31,7 +31,7 @@ server.on("connection", (client) => {
 	  client.print("e");
 	  let body = { username: "minitel", content: "qwerty" };
 	  body["content"] = input.toLowerCase();
-	  let epic = await fetch("oui !", {
+	  let epic = await fetch("x", {
 		method: "POST",
 		headers: { "Content-Type": "application/json" },
 		body: JSON.stringify(body)
